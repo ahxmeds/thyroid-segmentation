@@ -31,12 +31,12 @@ os.makedirs(vizsavedir, exist_ok=True)
 #%%
 def preprocess_one_image(stpath, gtpath):
     # read dicom, nifti images into numpy arrays 
-    st, dc = read_dicom_image(stpath)
-    gt = read_nifti_image(gtpath)
+    st, dc = read_dicom_image(stpath) # ST
+    gt = read_nifti_image(gtpath) # GT
     # read spacing from nifti data
     spacing = sitk.ReadImage(gtpath).GetSpacing()[:-1]
     
-    # find if the number of dimensions in the ST 
+    # find the number of dimensions in the ST 
     # it can be 2D (128,128) or 3D (2, 128, 128) or (2, 256,256)
     # goal is to get a final 2D image
     # select the channel indexed 0 when the image is 3D
