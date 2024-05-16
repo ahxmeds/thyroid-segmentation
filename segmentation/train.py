@@ -41,7 +41,7 @@ def pad_zeros_at_front(num, N):
 
 #%%
 def load_train_objects(args):
-    train_data, valid_data, test_data = get_train_valid_test_splits()
+    train_data, valid_data, test_data = get_train_valid_test_splits(args.leave_one_center_out)
     train_transforms = get_train_transforms(args.input_patch_size)
     valid_transforms = get_valid_transforms()
     model = get_model(args.network_name) 
@@ -207,7 +207,7 @@ def main(args):
     os.environ['OMP_NUM_THREADS'] = '6'
     network = args.network_name
 
-    experiment_code = f"{network}_exp01"
+    experiment_code = f"{network}_loco{args.leave_one_center_out}"
 
     #save models folder
     save_models_dir = os.path.join(RESULTS_FOLDER,'models')
@@ -234,6 +234,8 @@ if __name__ == "__main__":
     #                     help='validation fold (default: 0), remaining folds will be used for training')
     parser.add_argument('--network-name', type=str, default='unet', metavar='netname',
                         help='network name for training (default: unet)')
+    parser.add_argument('--leave-one-center-out', type=str, default='A', metavar='center',
+                        help='leave a center out for testing (default: A)')
     parser.add_argument('--epochs', type=int, default=500, metavar='epochs',
                         help='number of epochs to train (default: 10)')
     parser.add_argument('--input-patch-size', type=int, default=192, metavar='inputsize',

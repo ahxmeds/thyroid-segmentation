@@ -46,12 +46,21 @@ def remove_all_extensions(filename):
             return name
         filename = name
 
-def get_train_valid_test_splits():
-    stpaths = sorted(glob(os.path.join(DATA_FOLDER, 'images', '*.nii.gz')))
-    gtpaths = sorted(glob(os.path.join(DATA_FOLDER, 'labels', '*.nii.gz')))
-    data = create_dictionary_stgt(stpaths, gtpaths)
-    train_data, test_data = train_test_split(data, test_size=0.2, random_state=42)
-    train_data, valid_data = train_test_split(train_data, test_size=0.2, random_state=42)
+def get_train_valid_test_splits(leave_one_center_out='A'):
+    datapath = '/home/jhubadmin/Projects/thyroid-segmentation/segmentation/datainfo_images_to_use.csv'
+    data = pd.read_csv(datapath)
+    trainvalid_ids = data[data['CenterID'] != leave_one_center_out]['PatientID'].tolist()
+    test_ids = data[data['CenterID'] == leave_one_center_out]['PatientID'].tolist()
+
+    stpaths_trainvalid = [os.path.join(DATA_FOLDER, 'images', f'{id}.nii.gz') for id in trainvalid_ids]
+    gtpaths_trainvalid = [os.path.join(DATA_FOLDER, 'labels', f'{id}.nii.gz') for id in trainvalid_ids]
+
+    stpaths_test = [os.path.join(DATA_FOLDER, 'images', f'{id}.nii.gz') for id in test_ids]
+    gtpaths_test = [os.path.join(DATA_FOLDER, 'labels', f'{id}.nii.gz') for id in test_ids]
+
+    trainvalid_data = create_dictionary_stgt(stpaths_trainvalid, gtpaths_trainvalid)
+    test_data = create_dictionary_stgt(stpaths_test, gtpaths_test)
+    train_data, valid_data = train_test_split(trainvalid_data, test_size=0.2, random_state=42)
     return train_data, valid_data, test_data
 
 #%%
@@ -160,7 +169,6 @@ def get_model(network_name = 'unet'):
             num_res_units=2,
             norm=Norm.BATCH
         )
-   
     return model
 
 
