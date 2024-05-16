@@ -183,6 +183,7 @@ def main_worker(save_models_dir, save_logs_dir, args):
                     # compute metric for current iteration
                     metric(y_pred=val_outputs, y=val_labels)
 
+
                 # aggregate the final mean dice result
                 metric_val = metric.aggregate().item()
                 metric.reset()

@@ -34,7 +34,7 @@ from sklearn.model_selection import train_test_split
 #%%
 def pad_zeros_at_front(num, N):
     return  str(num).zfill(N)
-
+ 
 def create_dictionary_stgt(stpaths, gtpaths):
     data = [{'ST':stpath, 'GT':gtpath} for stpath, gtpath in zip(stpaths, gtpaths)]
     return data

@@ -36,7 +36,7 @@ def plot_train_logs(train_fpaths, valid_fpaths, network_names):
         
     legend_labels_trainloss = [f"{network_names[i]}; Min loss: {round(min_losses[i], 4)} ({min_losses_epoch[i]})" for i in range(len(network_names))]
     legend_labels_validdice = [f"{network_names[i]}; Max DSC: {round(max_dscs[i], 4)} ({max_dscs_epoch[i]})" for i in range(len(network_names))]
-
+ 
     ax[0].legend(legend_labels_trainloss, fontsize=16)
     ax[1].legend(legend_labels_validdice, fontsize=16)
     ax[0].set_title('Train loss', fontsize=25)
