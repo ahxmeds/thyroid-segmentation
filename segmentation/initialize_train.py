@@ -169,6 +169,16 @@ def get_model(network_name = 'unet'):
             num_res_units=2,
             norm=Norm.BATCH
         )
+    if network_name == 'unet1':
+        model = UNet(
+            spatial_dims=2,
+            in_channels=1,
+            out_channels=2,
+            channels=(16, 32, 64, 128, 256),
+            strides=(2, 2, 2, 2),
+            num_res_units=2,
+            norm=Norm.BATCH
+        )
     return model
 
 

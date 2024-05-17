@@ -27,16 +27,19 @@ def plot_train_logs(train_fpaths, valid_fpaths, network_names):
     fig.patch.set_alpha(1)
 
     for i in range(len(train_losses)):
-        ax[0].plot(train_epochs[i], train_losses[i])
-        ax[1].plot(valid_epochs[i], valid_metrics[i])
-        ax[0].plot(min_losses_epoch[i], min_losses[i], '-o', color='red')
-        ax[1].plot(max_dscs_epoch[i], max_dscs[i], '-o', color='red')
+        ax[0].plot(train_epochs[i], train_losses[i], linewidth=2)
+        ax[1].plot(valid_epochs[i], valid_metrics[i], linewidth=2)
         
-        ax[0].text(np.min(train_epochs[i]), np.min(train_losses[i]), f'Total epochs: {len(train_epochs[i])}', fontsize=15)
+        
+        # ax[0].text(np.min(train_epochs[i]), np.min(train_losses[i]), f'Total epochs: {len(train_epochs[i])}', fontsize=15)
         
     legend_labels_trainloss = [f"{network_names[i]}; Min loss: {round(min_losses[i], 4)} ({min_losses_epoch[i]})" for i in range(len(network_names))]
     legend_labels_validdice = [f"{network_names[i]}; Max DSC: {round(max_dscs[i], 4)} ({max_dscs_epoch[i]})" for i in range(len(network_names))]
- 
+    
+    for i in range(len(train_losses)):
+        ax[0].plot(min_losses_epoch[i], min_losses[i], '-o', color='red', label='')
+        ax[1].plot(max_dscs_epoch[i], max_dscs[i], '-o', color='red', label='')
+
     ax[0].legend(legend_labels_trainloss, fontsize=16)
     ax[1].legend(legend_labels_validdice, fontsize=16)
     ax[0].set_title('Train loss', fontsize=25)
@@ -48,14 +51,13 @@ def plot_train_logs(train_fpaths, valid_fpaths, network_names):
     plt.show()
 
 #%%
-network = ['unet']
-expcodes = ['exp01']
-
+network = ['unet','unet','unet','unet','unet', 'unet1']
+expcodes = ['locoA','locoB','locoC','locoD','locoE', 'locoE']
+legend_lbls = [f'{n}_{e}' for n, e in zip(network, expcodes)]
 experiment_code = [f"{network[i]}_{expcodes[i]}" for i in range(len(network))]
 save_logs_dir = os.path.join(RESULTS_FOLDER, 'logs')
 save_logs_folders = [os.path.join(save_logs_dir, experiment_code[i]) for i in range(len(experiment_code))]
 train_fpaths = [os.path.join(save_logs_folders[i], 'trainlog_gpu0.csv') for i in range(len(save_logs_folders))]
 valid_fpaths = [os.path.join(save_logs_folders[i], 'validlog_gpu0.csv') for i in range(len(save_logs_folders))]
-legend_lbls = expcodes
 plot_train_logs(train_fpaths, valid_fpaths, legend_lbls)
 # %%
